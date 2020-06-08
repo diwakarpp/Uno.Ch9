@@ -10,10 +10,59 @@
 	  mc:Ignorable="d android">
 
     <Page.Resources>
-        <DataTemplate x:Key="TotoTemplate">
-            <Grid Background="Orange"
-                  Width="100"
-                  Height="100" />
+        <DataTemplate x:Key="ShowDetailsTemplate">
+            <StackPanel Background="{StaticResource Color02Brush}"
+                        Padding="16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Background="{StaticResource Color07Brush}"
+							  Height="64"
+							  Width="64" />
+
+                    <!--Show Image-->
+
+                    <Image Source="{Binding Image}"
+							   Height="64"
+							   Stretch="Uniform" />
+
+                    <StackPanel Grid.Column="1">
+
+
+                        <!--Show Name-->
+
+                        <TextBlock Text="{Binding Name}"
+									   Style="{StaticResource Typo01}"
+									   Margin="16,2,16,0" />
+
+
+                        <!--Episodes count-->
+
+                        <TextBlock Style="{StaticResource Typo09}"
+									   Margin="16,4,16,0">
+					
+							
+                         <!--Episodes Count--> 
+                        <Run Text="{Binding Episodes, Converter={StaticResource EnumerableItemsCount}}" />
+
+							
+                         <!--Episodes-->                         
+						<Run Text="Episodes"
+								x:Uid="ShowPage_Episodes" />
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+
+
+                <!--Show description-->
+                <TextBlock Text="{Binding Description}"
+							   Style="{StaticResource Typo03}"
+							   Margin="0,15,16,0"
+							   Grid.Row="2" />
+            </StackPanel>
         </DataTemplate>
     </Page.Resources>
     
@@ -61,13 +110,13 @@
 								Value="Collapsed" />
 						<Setter Target="DismissButton.Visibility"
 								Value="Collapsed" />
-						<Setter Target="PostList.Padding"
+                        <Setter Target="ShowDetails.Visibility"
+								Value="Visible" />
+                        <Setter Target="PostList.Padding"
 								Value="12,0" />
-                        <!--<Setter Target="MainScrollViewer.VerticalScrollMode"
-								Value="Disabled" />
-                        <Setter Target="MainScrollViewer.VerticalScrollBarVisibility"
-								Value="Disabled" />-->
-					</VisualState.Setters>
+                        <Setter Target="PostList.HeaderTemplate"
+								Value="{StaticResource EmptyListViewHeaderTemplate}" />
+                    </VisualState.Setters>
 				</VisualState>
 
 				<VisualState x:Name="WideAndNotSelected">
@@ -91,17 +140,17 @@
 								Value="1" />
                         <!--<Setter Target="PostNoContent.Row"
 								Value="1" />-->
+                        <Setter Target="ShowDetails.Visibility"
+								Value="Visible" />
 						<Setter Target="ModalBackground.Visibility"
 								Value="Collapsed" />
 						<Setter Target="DismissButton.Visibility"
 								Value="Collapsed" />
 						<Setter Target="PostList.Padding"
 								Value="12,0" />
-                        <!--<Setter Target="MainScrollViewer.VerticalScrollMode"
-								Value="Disabled" />
-                        <Setter Target="MainScrollViewer.VerticalScrollBarVisibility"
-								Value="Disabled" />-->
-					</VisualState.Setters>
+                        <Setter Target="PostList.HeaderTemplate"
+								Value="{StaticResource EmptyListViewHeaderTemplate}" />
+                    </VisualState.Setters>
 				</VisualState>
 
 				<VisualState x:Name="NarrowAndSelected">
@@ -154,7 +203,15 @@
 				</Grid.ColumnDefinitions>
 
 				<!-- Show details -->
-				<StackPanel x:Name="ShowDetails" 
+            <ContentControl x:Name="ShowDetails" 
+							Content="{Binding Show.Result}"
+                            ContentTemplate="{StaticResource ShowDetailsTemplate}"
+                            HorizontalContentAlignment="Stretch"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Visibility="Collapsed" />
+
+            <!--<StackPanel x:Name="ShowDetails" 
 							Visibility="{Binding Show.IsSuccess, Converter={StaticResource TrueToVisible}, FallbackValue=Visible}"
 							Background="{StaticResource Color02Brush}"
 							Padding="16"
@@ -171,38 +228,38 @@
 							  Height="64"
 							  Width="64" />
 
-						<!-- Show Image -->
+						--><!-- Show Image --><!--
                         <Image Source="{Binding Show.Result.Image}"
 							   Height="64"
 							   Stretch="Uniform" />
 
 						<StackPanel Grid.Column="1">
 
-							<!-- Show Name -->
+							--><!-- Show Name --><!--
                             <TextBlock Text="{Binding Show.Result.Name}"
 									   Style="{StaticResource Typo01}"
 									   Margin="16,2,16,0" />
 
-							<!-- Episodes count -->
+							--><!-- Episodes count --><!--
 							<TextBlock Style="{StaticResource Typo09}"
 									   Margin="16,4,16,0">
 					
-							<!-- Episodes Count -->
+							--><!-- Episodes Count --><!--
 							<Run Text="{Binding Show.Result.Episodes, Converter={StaticResource EnumerableItemsCount}}" />
 
-							<!-- Episodes -->
+							--><!-- Episodes --><!--
 							<Run Text="Episodes"
 								 x:Uid="ShowPage_Episodes" />
 							</TextBlock>
 						</StackPanel>
 					</Grid>
 
-					<!-- Show description -->
+					--><!-- Show description --><!--
                     <TextBlock Text="{Binding Show.Result.Description}"
 							   Style="{StaticResource Typo03}"
 							   Margin="0,15,16,0"
 							   Grid.Row="2" />
-				</StackPanel>
+				</StackPanel>-->
 
 				<!-- Post list content root -->
 				<Grid x:Name="PostListContentRoot"
@@ -216,12 +273,11 @@
 						<ListView x:Name="PostList"
 								  ItemsSource="{Binding Episodes}"
 								  ItemTemplate="{StaticResource PostItemTemplate}"
-                                  Header="{Binding}"
-                                  HeaderTemplate="{StaticResource TotoTemplate}"
+                                  Header="{Binding Show.Result}"
+                                  HeaderTemplate="{StaticResource ShowDetailsTemplate}"
 								  SelectionMode="Single"
 								  SelectedItem="{Binding SelectedEpisode, Mode=TwoWay}"
-								  ItemContainerStyle="{StaticResource PostListViewItemStyle}"
-								  SelectionChanged="PostListSelectionChanged" />
+								  ItemContainerStyle="{StaticResource PostListViewItemStyle}" />
 
 						<!-- Empty List Message -->
                         <TextBlock Visibility="{Binding Episodes, Converter={StaticResource EnumerableHasAnyToCollapsed}, FallbackValue=Collapsed}"

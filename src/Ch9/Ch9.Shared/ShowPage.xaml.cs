@@ -47,37 +47,18 @@ namespace Ch9
 		private void OnItemsSourceChanged(DependencyObject sender, DependencyProperty dp)
 		{
 			// Auto select the first element if the items change and the window is wide.
-			//var listView = sender as ListView;
-			//var items = listView?.ItemsSource as ICollection;
+			var listView = sender as ListView;
+			var items = listView?.ItemsSource as ICollection;
 
-			//if (items?.Count > 0 &&
-			//	Windows.UI.Xaml.Window.Current.Bounds.Width >= 800)
-			//{
-			//	// Dispatch item selection on the next loop.
-			//	_ = Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
-			//	{
-			//		listView.SelectedIndex = 0;
-			//	});
-			//}
-		}
-
-		private void PostListSelectionChanged(object sender, SelectionChangedEventArgs e)
-		{
-			// Auto select the first element if the items change and the window is wide.
-			//var listView = sender as ListView;
-			//var items = listView?.ItemsSource as ICollection;
-
-			//if (Windows.UI.Xaml.Window.Current.Bounds.Width <= 800)
-			//{
-			//	ScrollViewer scroller = (ScrollViewer)NarrowScrollViewer;
-
-			//	scroller.ChangeView(
-			//		horizontalOffset: 0,
-			//		verticalOffset: 0,
-			//		zoomFactor: 1,
-			//		disableAnimation: true
-			//	);
-			//}
+			if (items?.Count > 0 &&
+				Windows.UI.Xaml.Window.Current.Bounds.Width >= 800)
+			{
+				// Dispatch item selection on the next loop.
+				_ = Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+				{
+					listView.SelectedIndex = 0;
+				});
+			}
 		}
 	}
 }
