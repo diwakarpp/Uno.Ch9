@@ -102,8 +102,10 @@
 						</triggers:CompositeStateTrigger>
 					</VisualState.StateTriggers>
 
-					<VisualState.Setters>
-						<Setter Target="NavigationTabsContainer.Visibility"
+                    <VisualState.Setters>
+                        <Setter Target="CommandBar.Visibility"
+								Value="Collapsed" />
+                        <Setter Target="NavigationTabsContainer.Visibility"
 								Value="Collapsed" />
 					</VisualState.Setters>
 				</VisualState>
